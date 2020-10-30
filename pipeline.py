@@ -2,12 +2,14 @@ import sys
 import os
 import time
 import argparse
+import logging
 
 import torch
 import torch.nn as nn
 import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
 
+import PIL
 from PIL import Image
 
 import cv2
@@ -25,7 +27,10 @@ from craft import CRAFT
 
 from collections import OrderedDict
 
-from google.colab.patches import cv2_imshow
+
+logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(asctime)s) %(name)s: %(message)s')
+
+PIL.Image.MAX_IMAGE_PIXELS = 933120000
 
 #CRAFT
 parser = argparse.ArgumentParser(description='CRAFT Text Detection')
@@ -69,7 +74,7 @@ if __name__ == '__main__':
     # load net
     net = CRAFT()     # initialize
 
-    print('Loading weights from checkpoint (' + args.trained_model + ')')
+    logging.info('Loading weights from checkpoint (' + args.trained_model + ')')
     if args.cuda:
         net.load_state_dict(test.copyStateDict(torch.load(args.trained_model)))
     else:
@@ -87,7 +92,7 @@ if __name__ == '__main__':
     if args.refine:
         from refinenet import RefineNet
         refine_net = RefineNet()
-        print('Loading weights of refiner from checkpoint (' + args.refiner_model + ')')
+        logging.info('Loading weights of refiner from checkpoint (' + args.refiner_model + ')')
         if args.cuda:
             refine_net.load_state_dict(copyStateDict(torch.load(args.refiner_model)))
             refine_net = refine_net.cuda()
@@ -102,7 +107,7 @@ if __name__ == '__main__':
 
     # load data
     for k, image_path in enumerate(image_list):
-        print("Test image {:d}/{:d}: {:s}".format(k+1, len(image_list), image_path), end='\r')
+        logging.info("Test image {:d}/{:d}: {:s}".format(k+1, len(image_list), image_path))
         image = imgproc.loadImage(image_path)
 
         bboxes, polys, score_text, det_scores = test.test_net(net, image, args.text_threshold, args.link_threshold, args.low_text, args.cuda, args.poly, args, refine_net)
@@ -123,4 +128,4 @@ if __name__ == '__main__':
         file_utils.saveResult(image_path, image[:,:,::-1], polys, dirname=result_folder + '/')
 
     data.to_csv(result_folder + '/bboxes.csv', sep = ',', na_rep='Unknown')
-    print("elapsed time : {}s".format(time.time() - t))
+    logging.info("elapsed time : {}s".format(time.time() - t))

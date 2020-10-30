@@ -2,7 +2,6 @@ import os
 import numpy as np
 import cv2
 import pandas as pd
-from google.colab.patches import cv2_imshow
 
 def crop(pts, image):
 
@@ -56,9 +55,7 @@ def generate_words(image_name, score_bbox, image):
           file_name = os.path.join(result_dir + image_name)
           
           cv2.imwrite(file_name+'_{}_{}_{}_{}_{}_{}_{}_{}.jpg'.format(t_l, l_t, t_r ,r_t, b_r , r_b ,b_l, l_b), word)
-          #cv2.imwrite(file_name+'_{}_{}_{}_{}_{}_{}_{}_{}.jpg'.format(l_t, t_l, r_t ,t_r, r_b , b_r ,l_b, b_l), word)
-          print('Image saved to '+file_name+'_{}_{}_{}_{}_{}_{}_{}_{}.jpg'.format(t_l, l_t, t_r ,r_t, b_r , r_b ,b_l, l_b))
-          #print('Image saved to '+file_name+'_{}_{}_{}_{}_{}_{}_{}_{}.jpg'.format(l_t, t_l, r_t ,t_r, r_b , b_r ,l_b, b_l))
+          # print('Image saved to '+file_name+'_{}_{}_{}_{}_{}_{}_{}_{}.jpg'.format(t_l, l_t, t_r ,r_t, b_r , r_b ,b_l, l_b))
         except:
           continue
 
