@@ -14,7 +14,7 @@ def list_files(in_path):
     mask_files = []
     gt_files = []
     for (dirpath, dirnames, filenames) in os.walk(in_path):
-        for file in filenames:
+        for file in sorted(filenames):
             filename, ext = os.path.splitext(file)
             ext = str.lower(ext)
             if ext == '.jpg' or ext == '.jpeg' or ext == '.gif' or ext == '.png' or ext == '.pgm':
@@ -54,9 +54,11 @@ def saveResult(img_file, img, boxes, dirname='./result/', verticals=None, texts=
 
         with open(res_file, 'w') as f:
             for i, box in enumerate(boxes):
-                poly = np.array(box).astype(np.int32).reshape((-1))
+                poly = np.array(box).astype(np.float32).reshape((-1))
                 strResult = ','.join([str(p) for p in poly]) + '\r\n'
                 f.write(strResult)
+
+                poly = np.array(box).astype(np.int32).reshape((-1))
 
                 poly = poly.reshape(-1, 2)
                 cv2.polylines(img, [poly.reshape((-1, 1, 2))], True, color=(0, 0, 255), thickness=2)

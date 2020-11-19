@@ -127,5 +127,8 @@ if __name__ == '__main__':
 
         file_utils.saveResult(image_path, image[:,:,::-1], polys, dirname=result_folder + '/')
 
+        if k%10 == 0:
+            data.to_csv(result_folder + '/bboxes.csv', sep = ',', na_rep='Unknown')
+
     data.to_csv(result_folder + '/bboxes.csv', sep = ',', na_rep='Unknown')
     logging.info("elapsed time : {}s".format(time.time() - t))

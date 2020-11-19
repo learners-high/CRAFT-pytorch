@@ -43,16 +43,15 @@ def generate_words(image_name, score_bbox, image):
         
         word = crop(pts, image)
         
-        folder = '/'.join( image_name.split('/')[:-1])
-
         #CHANGE DIR
         result_dir = 'crop_image/'
 
-        if os.path.isdir(os.path.join(result_dir + folder)) == False :
-          os.makedirs(os.path.join(result_dir + folder))
+
+        if os.path.isdir(os.path.join(result_dir, image_name)) == False :
+          os.makedirs(os.path.join(result_dir, image_name))
 
         try:
-          file_name = os.path.join(result_dir + image_name)
+          file_name = os.path.join(result_dir, image_name, image_name)
           
           cv2.imwrite(file_name+'_{}_{}_{}_{}_{}_{}_{}_{}.jpg'.format(t_l, l_t, t_r ,r_t, b_r , r_b ,b_l, l_b), word)
           # print('Image saved to '+file_name+'_{}_{}_{}_{}_{}_{}_{}_{}.jpg'.format(t_l, l_t, t_r ,r_t, b_r , r_b ,b_l, l_b))
@@ -67,6 +66,6 @@ for image_num in range(data.shape[0]):
   print(data['image_name'][image_num])
 
   image = cv2.imread(os.path.join(start, data['image_name'][image_num]))
-  image_name = data['image_name'][image_num].strip('.jpg')
+  image_name = data['image_name'][image_num].strip('.png')
   score_bbox = data['word_bboxes'][image_num].split('),')
   generate_words(image_name, score_bbox, image)

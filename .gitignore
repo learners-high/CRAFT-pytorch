@@ -8,3 +8,5 @@ weights*
 .DS_Store
 pipeline
 crop_image
+
+figures
