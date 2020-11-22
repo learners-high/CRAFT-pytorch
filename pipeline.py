@@ -58,6 +58,13 @@ result_folder = './pipeline/'
 if not os.path.isdir(result_folder):
     os.mkdir(result_folder)
 
+detected_image = set()
+for image in image_list:
+    name = image.rstrip().split('/')[-1].split('.')[0]
+    if os.path.isfile('{}/res_{}.txt'.format(result_folder, name)):
+        detected_image.add(image)
+image_list = sorted(list(set(image_list) - detected_image))
+
 #CUSTOMISE START
 image_names = []
 image_paths = []
