@@ -1,6 +1,9 @@
 import os
 import shutil
 
+
+os.makedirs('./crop_image_exploded', exist_ok=True)
+
 for d in os.listdir('./crop_image'):
     if d == '.DS_Store':
         continue
